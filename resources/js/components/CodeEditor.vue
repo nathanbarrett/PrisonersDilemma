@@ -10,11 +10,8 @@
 
 <script setup lang="ts">
 import { shallowRef, watch, ref } from "vue";
-import { editor } from "monaco-editor";
+import { editor, editor as editorTypes } from "monaco-types";
 import { useTheme } from "vuetify";
-import IEditorOptions = editor.IEditorOptions;
-import IEditor = editor.IEditor;
-import IMarker = editor.IMarker;
 
 export interface CodeError {
     message: string;
@@ -36,7 +33,7 @@ const code = defineModel({
     default: "",
 });
 
-const editorRef = shallowRef<IEditor|undefined>();
+const editorRef = shallowRef<editorTypes.IEditor|undefined>();
 
 function checkForErrors() {
     if (!editorRef.value) {
@@ -44,7 +41,7 @@ function checkForErrors() {
         emit("code:errors", []);
         return;
     }
-    let errors: IMarker[] = [];
+    let errors: editorTypes.IMarker[] = [];
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         errors = (window as any).monaco.editor.getModelMarkers({});
@@ -88,13 +85,13 @@ const props = defineProps({
     },
 });
 
-const MONACO_EDITOR_OPTIONS: IEditorOptions = {
+const MONACO_EDITOR_OPTIONS: editorTypes.IEditorOptions = {
     automaticLayout: true,
     formatOnType: true,
     formatOnPaste: true,
     readOnly: props.readOnly,
 };
-const handleMount = (editor: IEditor) => (editorRef.value = editor);
+const handleMount = (editor: editor.IEditor) => (editorRef.value = editor);
 
 watch(props, (newProps) => {
     if (MONACO_EDITOR_OPTIONS.readOnly !== newProps.readOnly) {
