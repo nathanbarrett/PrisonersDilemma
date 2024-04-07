@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "lib": ["es2016", "dom"],
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "allowSyntheticDefaultImports": true,
+        "paths": {
+            "@js/*": ["resources/js/*"]
+        }
+    }
+}
