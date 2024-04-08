@@ -46,6 +46,7 @@ onBeforeMount(() => {
           Switch to {{ isDarkTheme ? "light" : "dark" }} theme
         </v-list-item>
         <v-list-item
+          prepend-icon="mdi-help-circle"
           @click="openAboutDialog = true"
         >
           How To Play

@@ -7,7 +7,6 @@ use App\Models\Player;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use League\Flysystem\FilesystemException;
 
 class PublishSystemPlayersCode extends Command
 {
