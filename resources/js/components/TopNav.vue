@@ -48,7 +48,7 @@ onBeforeMount(() => {
         <v-list-item
           @click="openAboutDialog = true"
         >
-          About
+          How To Play
         </v-list-item>
       </v-list>
     </v-menu>
@@ -99,7 +99,7 @@ onBeforeMount(() => {
       <v-card>
         <v-card-title>
           <div class="w-100 d-flex flex-row justify-space-between align-center">
-            <div>Why I Made This</div>
+            <div>How To Play</div>
             <v-icon
               size="xs"
               icon="mdi-close"
@@ -108,13 +108,20 @@ onBeforeMount(() => {
           </div>
         </v-card-title>
         <v-card-text>
-          I love the show Veritasium, particularly <a
+          Inpired by Veritasium's <a
             href="https://www.youtube.com/watch?v=mScpHTIi-kM"
             target="_blank"
-          >the show about the prisoner's dilemma.</a>
-          I wanted to make a game that would allow people to play the prisoner's dilemma game using different strategies.
-          In the near future I plan to make your players publishable so that other people can play against them.
+          >show on the prisoner's dilemma.</a>.
+          Watch the video for and in-depth explanation.
           <br><br>
+          You score points based on the choices you and your opponent make. Look at the tournament configuration page to see a breakdown of the scoring.
+          <br><br>
+          Blue title players are prebuilt system players. You can use them in your tournaments but you cannot edit their code.
+          <br><br>
+          You can also create your own players by clicking the "Create New Player" button.
+          <br><br>
+          Once you have two or more players selected, you can run a tournament by clicking the "Run Tournament" button.
+          <br><br><br><br>
           Made with ❤️ by <a
             href="https://twitter.com/un4tunatetoast"
             target="_blank"
