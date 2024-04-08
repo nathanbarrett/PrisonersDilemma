@@ -4,7 +4,12 @@
  */
 
 /**
- * These are here for your reference. The code editor will also typehint these for you.
+ * HEY THERE! Coming here for the first time?
+ * Go to "How To Play" in the menu at the top left to get started.
+ *
+ * All types and interfaces are below for your reference.
+ * The code editor will also typehint these for you.
+ * The goal is to return a Promise with either "COOPERATE" or "DEFECT" from the playRound function.
  * You are building a Player, so start by looking at the Player interface.
  */
 export interface Player {
@@ -26,6 +31,7 @@ export interface Player {
 
 export type PlayRound = (playRoundInfo: PlayRoundInfo) => Promise<RoundVote>;
 
+/* You can optionally return "DECLINE" from the playRound function ONLY if the tournament rules allow it */
 export type RoundVote = 'COOPERATE' | 'DEFECT' | 'DECLINE';
 
 /* This is the information that will be passed to the playRound function.*/
