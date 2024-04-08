@@ -57,7 +57,15 @@ onBeforeMount(() => {
       class="pointer"
       @click="router.visit('/')"
     >
-      {{ appName }}
+      <div class="d-flex flex-row align-center">
+        <img
+          src="/images/prisoners_dilemma.webp"
+          alt="Prisoners Dilemma Logo"
+          height="30"
+          class="mr-2"
+        >
+        {{ appName }}
+      </div>
     </v-app-bar-title>
     <v-spacer v-if="!mobile" />
     <v-btn
@@ -111,7 +119,7 @@ onBeforeMount(() => {
           Inpired by Veritasium's <a
             href="https://www.youtube.com/watch?v=mScpHTIi-kM"
             target="_blank"
-          >show on the prisoner's dilemma.</a>.
+          >show on the prisoner's dilemma</a>.
           Watch the video for and in-depth explanation.
           <br><br>
           You score points based on the choices you and your opponent make. Look at the tournament configuration page to see a breakdown of the scoring.

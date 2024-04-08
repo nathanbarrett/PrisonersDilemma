@@ -7,6 +7,8 @@ LIVV is a full stack web application framework built on top of the Laravel PHP f
 
 LIVV is designed to be a starting point for building web applications with a modern, hybrid frontend and a traditional server-side backend.
 
+https://github.com/nathanbarrett/livv-stack
+
 ## Features
 
 - Laravel 10.x, PHP 8.3

@@ -20,6 +20,9 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@bugsnag/browser-performance": "^2.4.0",
+        "@bugsnag/js": "^7.22.4",
+        "@bugsnag/plugin-vue": "^7.22.4",
         "@guolao/vue-monaco-editor": "^1.5.1",
         "@inertiajs/vue3": "^1.0.14",
         "@mdi/font": "^7.3.67",

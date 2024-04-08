@@ -2,7 +2,7 @@
 import PlayerCodeEditor from "@js/components/PlayerCodeEditor.vue";
 import { canPlayInTournament, parsePlayerFromCode, SelectablePlayer } from "@js/common/tournament-helpers";
 import { computed, ref, watch, onMounted } from "vue";
-import { useDisplay } from "vuetify";
+import { useTheme } from "vuetify";
 import axios from "@js/common/axios";
 import { userPlayer } from "@js/players/templatePlayer";
 import { usePage } from "@inertiajs/vue3";
@@ -32,7 +32,7 @@ const templatePlayer = ref<SelectablePlayer>({
   errored: false,
 });
 
-const { mobile } = useDisplay();
+const theme = useTheme();
 
 const user = computed<User|null>(() => usePage<AppPageProps>().props.auth.user as User|null);
 
@@ -73,6 +73,7 @@ function onCodeErrors(errors: CodeError[]) {
 }
 
 const codeErrors = ref<CodeError[]>([]);
+const isDarkTheme = computed<boolean>(() => theme.global.current.value.dark);
 
 function playerTextColor(player: SelectablePlayer) {
     if (player.errored) {
@@ -81,7 +82,10 @@ function playerTextColor(player: SelectablePlayer) {
     if (!canPlayInTournament(player, props.tournamentRules)) {
         return "text-grey";
     }
-    return player.isSystemPlayer ? "text-blue" : "text-black";
+    if (player.isSystemPlayer) {
+        return "text-blue";
+    }
+    return isDarkTheme.value ? "text-white" : "text-black";
 }
 
 function onPlayerChecked(player: SelectablePlayer, event) {

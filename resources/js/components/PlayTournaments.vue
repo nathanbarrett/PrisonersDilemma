@@ -56,7 +56,7 @@ onBeforeMount(async () => {
   <v-tabs
     v-if="!mobile"
     v-model="tabPage"
-    bg-color="accent"
+    bg-color="secondary"
   >
     <v-tab
       :value="TabPage.Play"
