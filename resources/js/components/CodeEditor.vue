@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import { shallowRef, watch, ref } from "vue";
+import { useDisplay } from "vuetify";
 import { editor, editor as editorTypes } from "monaco-types";
 import { useTheme } from "vuetify";
 
@@ -85,11 +86,16 @@ const props = defineProps({
     },
 });
 
+const { mobile } = useDisplay();
 const MONACO_EDITOR_OPTIONS: editorTypes.IEditorOptions = {
     automaticLayout: true,
     formatOnType: true,
     formatOnPaste: true,
     readOnly: props.readOnly,
+    minimap: {
+        enabled: !mobile.value,
+    },
+    fontSize: mobile.value ? 10 : 12,
 };
 const handleMount = (editor: editor.IEditor) => (editorRef.value = editor);
 

@@ -2,6 +2,7 @@
 import PlayerCodeEditor from "@js/components/PlayerCodeEditor.vue";
 import { canPlayInTournament, parsePlayerFromCode, SelectablePlayer } from "@js/common/tournament-helpers";
 import { computed, ref, watch, onMounted } from "vue";
+import { useDisplay } from "vuetify";
 import axios from "@js/common/axios";
 import { userPlayer } from "@js/players/templatePlayer";
 import { usePage } from "@inertiajs/vue3";
@@ -30,6 +31,8 @@ const templatePlayer = ref<SelectablePlayer>({
   isPublic: false,
   errored: false,
 });
+
+const { mobile } = useDisplay();
 
 const user = computed<User|null>(() => usePage<AppPageProps>().props.auth.user as User|null);
 
@@ -109,7 +112,7 @@ async function savePlayer() {
 
     let response: AxiosResponse;
     try {
-        if (loadedPlayer.value.id === -1) {
+        if (loadedPlayer.value.id < 0) {
             // Create new player
             response = await axios.post("/player", payload);
         } else {
@@ -124,7 +127,7 @@ async function savePlayer() {
     }
 
     let created = false;
-    if (loadedPlayer.value.id === -1) {
+    if (loadedPlayer.value.id < 0) {
         created = true;
         loadedPlayer.value.id = response.data.id;
     }
@@ -160,8 +163,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-row no-gutters>
-    <v-col cols="3">
+  <v-row
+    no-gutters
+    class="mt-4 mt-lg-0"
+  >
+    <v-col
+      cols="12"
+      lg="3"
+    >
       <v-btn
         flat
         block
@@ -172,7 +181,7 @@ onMounted(async () => {
       <v-list select-strategy="classic">
         <v-list-item
           v-for="player in selectablePlayers"
-          :key="player.name"
+          :key="player.id"
         >
           <template #prepend>
             <v-list-item-action start>
@@ -198,8 +207,10 @@ onMounted(async () => {
       </v-list>
     </v-col>
     <v-col
-      cols="9"
+      cols="12"
+      lg="9"
       :style="{minHeight: '650px'}"
+      class="mt-4 mt-lg-0"
     >
       <v-btn
         flat
@@ -223,10 +234,10 @@ onMounted(async () => {
       >
         <ul>
           <li
-            v-for="error in codeErrors"
-            :key="error.message"
+            v-for="codeError in codeErrors"
+            :key="codeError.message"
           >
-            {{ error.message }} on line {{ error.lineNumber }}
+            {{ codeError.message }} on line {{ codeError.lineNumber }}
           </li>
         </ul>
       </v-alert>

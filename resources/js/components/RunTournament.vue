@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { SelectablePlayer, Tournament, runTournament, TournamentMatch } from "@js/common/tournament-helpers";
 import { ref } from "vue";
+import { useDisplay } from "vuetify";
 import { TournamentRules } from "@js/contracts/tournaments";
 import { truncate } from "@js/common/helpers";
 import OverallTournamentResultsPointsChart from "@js/components/tournament-results-charts/OverallTournamentResultsPointsChart.vue";
@@ -20,7 +21,7 @@ const running = ref<boolean>(false);
 const emit = defineEmits<{
     (e: 'running', isRunning: boolean): void
 }>();
-
+const { mobile } = useDisplay();
 const tournamentResults = ref<Tournament|null>(null);
 async function startTournament(): Promise<void> {
     if (running.value) {
@@ -52,6 +53,7 @@ const selectedOverallChart = ref<SelectedOverallChart>("points");
       <v-btn
         flat
         block
+        class="mt-4"
         color="primary"
         :loading="running"
         :disabled="running || props.players.length < 2"
@@ -93,7 +95,11 @@ const selectedOverallChart = ref<SelectedOverallChart>("points");
       cols="12"
     >
       <v-row>
-        <v-col cols="3">
+        <v-col
+          cols="12"
+          lg="3"
+          :order="mobile ? 2 : 1"
+        >
           <v-card
             v-for="match in tournamentResults.matches"
             :key="match.player1.name + match.player2.name"
@@ -126,7 +132,47 @@ const selectedOverallChart = ref<SelectedOverallChart>("points");
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="9">
+        <v-col
+          cols="12"
+          lg="9"
+          :order="mobile ? 1 : 2"
+        >
+          <v-card
+            v-if="tournamentResults"
+            title="Overall Tournament Results"
+            class="mt-3"
+          >
+            <v-card-text>
+              <v-btn-toggle
+                v-model="selectedOverallChart"
+                class="mb-6"
+              >
+                <v-btn value="points">
+                  Points
+                </v-btn>
+                <v-btn value="votes">
+                  Votes
+                </v-btn>
+                <v-btn value="winloss">
+                  Win/Loss
+                </v-btn>
+              </v-btn-toggle>
+              <div :class="mobile ? 'chart-container-mobile' : 'chart-container'">
+                <OverallTournamentResultsPointsChart
+                  v-if="selectedOverallChart === 'points'"
+                  :tournament-results="tournamentResults"
+                />
+                <OverallTournamentResultsVotesChart
+                  v-else-if="selectedOverallChart === 'votes'"
+                  :tournament-results="tournamentResults"
+                />
+                <OverallTournamentResultsWinLossChart
+                  v-else-if="selectedOverallChart === 'winloss'"
+                  :tournament-results="tournamentResults"
+                />
+              </div>
+            </v-card-text>
+          </v-card>
           <v-card
             v-if="selectedMatch"
             class="mt-3"
@@ -154,42 +200,6 @@ const selectedOverallChart = ref<SelectedOverallChart>("points");
               />
             </v-card-text>
           </v-card>
-          <v-card
-            v-if="tournamentResults"
-            title="Overall Tournament Results"
-            class="mt-3"
-          >
-            <v-card-text>
-              <v-btn-toggle
-                v-model="selectedOverallChart"
-                class="mb-6"
-              >
-                <v-btn value="points">
-                  Points
-                </v-btn>
-                <v-btn value="votes">
-                  Votes
-                </v-btn>
-                <v-btn value="winloss">
-                  Win/Loss
-                </v-btn>
-              </v-btn-toggle>
-              <div class="chart-container">
-                <OverallTournamentResultsPointsChart
-                  v-if="selectedOverallChart === 'points'"
-                  :tournament-results="tournamentResults"
-                />
-                <OverallTournamentResultsVotesChart
-                  v-else-if="selectedOverallChart === 'votes'"
-                  :tournament-results="tournamentResults"
-                />
-                <OverallTournamentResultsWinLossChart
-                  v-else-if="selectedOverallChart === 'winloss'"
-                  :tournament-results="tournamentResults"
-                />
-              </div>
-            </v-card-text>
-          </v-card>
         </v-col>
       </v-row>
     </v-col>
@@ -199,5 +209,9 @@ const selectedOverallChart = ref<SelectedOverallChart>("points");
 <style scoped>
 .chart-container {
     min-height: 420px;
+}
+
+.chart-container-mobile {
+    min-height: 200px;
 }
 </style>

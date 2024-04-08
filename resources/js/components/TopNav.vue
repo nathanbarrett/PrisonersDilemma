@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useTheme } from "vuetify";
+import { computed, ref, onBeforeMount } from "vue";
+import { useTheme, useDisplay } from "vuetify";
 import { User } from "@js/contracts/models/user";
 import { usePage, router } from "@inertiajs/vue3";
 
 const theme = useTheme();
+const { mobile } = useDisplay();
+const openAboutDialog = ref<boolean>(false);
 const user = computed<User|null>(() => usePage().props.auth.user);
 const appName = computed<string>(() => usePage().props.appName as string);
 const isDarkTheme = computed<boolean>(() => theme.global.name.value === "LivvDarkTheme");
@@ -12,7 +14,18 @@ const isDarkTheme = computed<boolean>(() => theme.global.name.value === "LivvDar
 function toggleTheme(): void {
     const currentTheme = theme.global.name.value;
     theme.global.name.value = currentTheme === "LivvDarkTheme" ? "LivvLightTheme" : "LivvDarkTheme";
+    localStorage.setItem("theme", theme.global.name.value);
 }
+
+onBeforeMount(() => {
+    const storedTheme = localStorage.getItem("theme");
+    if (![ "LivvDarkTheme", "LivvLightTheme" ].includes(storedTheme)) {
+        return;
+    }
+    if (storedTheme && storedTheme !== theme.global.name.value) {
+        theme.global.name.value = storedTheme;
+    }
+});
 </script>
 
 <template>
@@ -32,21 +45,33 @@ function toggleTheme(): void {
         >
           Switch to {{ isDarkTheme ? "light" : "dark" }} theme
         </v-list-item>
-        <v-list-item>Go to about</v-list-item>
-        <v-list-item>Go to contact</v-list-item>
+        <v-list-item
+          @click="openAboutDialog = true"
+        >
+          About
+        </v-list-item>
       </v-list>
     </v-menu>
     <v-app-bar-title
+      :class="mobile ? 'text-caption' : ''"
       class="pointer"
       @click="router.visit('/')"
     >
       {{ appName }}
     </v-app-bar-title>
-    <v-spacer />
+    <v-spacer v-if="!mobile" />
+    <v-btn
+      href="https://github.com/nathanbarrett/PrisonersDilemma"
+      target="_blank"
+      class="mr-2"
+      :size="mobile ? 'x-small' : 'small'"
+    >
+      <v-icon icon="mdi-github" />
+    </v-btn>
     <v-btn
       v-if="!user"
       variant="outlined"
-      size="small"
+      :size="mobile ? 'x-small' : 'small'"
       @click="router.visit('/register')"
     >
       Register
@@ -55,18 +80,48 @@ function toggleTheme(): void {
       v-if="!user"
       id="loginButton"
       variant="plain"
-      size="small"
+      :size="mobile ? 'x-small' : 'small'"
     >
       Login
     </v-btn>
     <v-btn
       v-if="user"
       variant="plain"
-      size="small"
+      :size="mobile ? 'x-small' : 'small'"
       href="/logout"
     >
       Logout
     </v-btn>
+    <v-dialog
+      v-model="openAboutDialog"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title>
+          <div class="w-100 d-flex flex-row justify-space-between align-center">
+            <div>Why I Made This</div>
+            <v-icon
+              size="xs"
+              icon="mdi-close"
+              @click="openAboutDialog = false"
+            />
+          </div>
+        </v-card-title>
+        <v-card-text>
+          I love the show Veritasium, particularly <a
+            href="https://www.youtube.com/watch?v=mScpHTIi-kM"
+            target="_blank"
+          >the show about the prisoner's dilemma.</a>
+          I wanted to make a game that would allow people to play the prisoner's dilemma game using different strategies.
+          In the near future I plan to make your players publishable so that other people can play against them.
+          <br><br>
+          Made with ❤️ by <a
+            href="https://twitter.com/un4tunatetoast"
+            target="_blank"
+          >Nathan Barrett</a>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app-bar>
 </template>
 

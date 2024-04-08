@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onBeforeMount } from "vue";
+import { useDisplay } from "vuetify";
 import axios from "@js/common/axios";
 import TournamentConfig from "@js/components/TournamentConfig.vue";
 import RunTournament from "@js/components/RunTournament.vue";
@@ -14,6 +15,7 @@ import { AxiosResponse } from "axios";
 import { Player as PlayerModel } from "@js/contracts/models/player";
 import { error } from "@js/common/snackbar";
 
+const { mobile } = useDisplay();
 enum TabPage {
     Play = "play",
     CreatePlayers = "createPlayers",
@@ -52,6 +54,7 @@ onBeforeMount(async () => {
 
 <template>
   <v-tabs
+    v-if="!mobile"
     v-model="tabPage"
     bg-color="accent"
   >
@@ -68,6 +71,32 @@ onBeforeMount(async () => {
       Tournament Configuration
     </v-tab>
   </v-tabs>
+  <v-btn-toggle
+    v-else
+    v-model="tabPage"
+    color="accent"
+    density="compact"
+  >
+    <v-btn
+      size="x-small"
+      :value="TabPage.Play"
+      :disabled="playablePlayers.length < 2"
+    >
+      Run
+    </v-btn>
+    <v-btn
+      size="x-small"
+      :value="TabPage.CreatePlayers"
+    >
+      Players
+    </v-btn>
+    <v-btn
+      size="x-small"
+      :value="TabPage.TournamentConfiguration"
+    >
+      Tournament Config
+    </v-btn>
+  </v-btn-toggle>
   <v-row v-if="tabPage === TabPage.Play">
     <v-col cols="12">
       <RunTournament

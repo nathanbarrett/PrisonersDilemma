@@ -46,7 +46,7 @@
     <v-col cols="12">
       <v-row>
         <v-col
-          md="12"
+          cols="12"
           lg="4"
         >
           <v-text-field
@@ -58,7 +58,7 @@
           />
         </v-col>
         <v-col
-          md="12"
+          cols="12"
           lg="4"
         >
           <v-text-field
@@ -70,7 +70,7 @@
           />
         </v-col>
         <v-col
-          md="12"
+          cols="12"
           lg="4"
         >
           <v-text-field
