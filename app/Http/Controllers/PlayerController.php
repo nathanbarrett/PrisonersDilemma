@@ -12,7 +12,6 @@ class PlayerController extends Controller
 {
     public function index(PlayerRepository $playerRepository): JsonResponse
     {
-        \Bugsnag\BugsnagLaravel\Facades\Bugsnag::notifyException(new \RuntimeException('Test error'));
         return response()->json($playerRepository->userPlayers()->toArray(), Response::HTTP_OK);
     }
 
